@@ -7,7 +7,7 @@ namespace CapTaiKhoan
     public partial class MainWindow : Window
     {
         ObservableCollection<User> users = new ObservableCollection<User>();
-
+            
         public MainWindow()
         {
             InitializeComponent();
