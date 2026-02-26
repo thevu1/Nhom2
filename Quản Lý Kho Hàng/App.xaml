@@ -1,0 +1,9 @@
+﻿<Application x:Class="Quản_Lý_Kho_Hàng.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Quản_Lý_Kho_Hàng"
+             StartupUri="NhapKho_PhieuNhap.xaml">
+    <Application.Resources>
+         
+    </Application.Resources>
+</Application>
