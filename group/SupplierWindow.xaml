@@ -1,0 +1,53 @@
+﻿<Window x:Class="group.SupplierWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Quản lý Nhà Cung Cấp" Height="450" Width="800">
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Vertical" Grid.Row="0" Margin="0,0,0,10">
+            <StackPanel Orientation="Horizontal" Margin="0,5">
+                <Label Content="Mã NCC:" Width="80"/>
+                <TextBox x:Name="txtMaNCC" Width="200"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,5">
+                <Label Content="Tên NCC:" Width="80"/>
+                <TextBox x:Name="txtTenNCC" Width="200"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,5">
+                <Label Content="SĐT:" Width="80"/>
+                <TextBox x:Name="txtSDT" Width="200"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,5">
+                <Label Content="Email:" Width="80"/>
+                <TextBox x:Name="txtEmail" Width="200"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,5">
+                <Label Content="Địa chỉ:" Width="80"/>
+                <TextBox x:Name="txtDiaChi" Width="200"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Margin="0,10">
+                <Button Content="Thêm" Width="80" Margin="5" Click="BtnThem_Click"/>
+                <Button Content="Sửa" Width="80" Margin="5" Click="BtnSua_Click"/>
+                <Button Content="Xóa" Width="80" Margin="5" Click="BtnXoa_Click"/>
+                <Button Content="Tìm kiếm" Width="80" Margin="5" Click="BtnTimKiem_Click"/>
+            </StackPanel>
+        </StackPanel>
+
+        <!-- Bảng hiển thị danh sách NCC -->
+        <DataGrid x:Name="dgNCC" Grid.Row="1" AutoGenerateColumns="False" CanUserAddRows="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Mã NCC" Binding="{Binding MaNCC}" Width="100"/>
+                <DataGridTextColumn Header="Tên NCC" Binding="{Binding TenNCC}" Width="150"/>
+                <DataGridTextColumn Header="SĐT" Binding="{Binding SDT}" Width="120"/>
+                <DataGridTextColumn Header="Email" Binding="{Binding Email}" Width="150"/>
+                <DataGridTextColumn Header="Địa chỉ" Binding="{Binding DiaChi}" Width="200"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</Window>
