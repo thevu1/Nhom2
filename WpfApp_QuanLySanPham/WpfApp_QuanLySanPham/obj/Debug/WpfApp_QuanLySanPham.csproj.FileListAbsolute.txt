@@ -1,0 +1,30 @@
+D:\BaiTapNhom\WpfApp_QuanLySanPham\WpfApp_QuanLySanPham\obj\Debug\WpfApp_QuanLySanPham.csprojAssemblyReference.cache
+D:\BaiTapNhom\WpfApp_QuanLySanPham\WpfApp_QuanLySanPham\obj\Debug\MainWindow.g.cs
+D:\BaiTapNhom\WpfApp_QuanLySanPham\WpfApp_QuanLySanPham\obj\Debug\App.g.cs
+D:\BaiTapNhom\WpfApp_QuanLySanPham\WpfApp_QuanLySanPham\obj\Debug\WpfApp_QuanLySanPham_MarkupCompile.cache
+D:\BaiTapNhom\WpfApp_QuanLySanPham\WpfApp_QuanLySanPham\obj\Debug\WpfApp_QuanLySanPham_MarkupCompile.lref
+D:\BaiTapNhom\WpfApp_QuanLySanPham\WpfApp_QuanLySanPham\bin\Debug\WpfApp_QuanLySanPham.exe.config
+D:\BaiTapNhom\WpfApp_QuanLySanPham\WpfApp_QuanLySanPham\bin\Debug\WpfApp_QuanLySanPham.exe
+D:\BaiTapNhom\WpfApp_QuanLySanPham\WpfApp_QuanLySanPham\bin\Debug\WpfApp_QuanLySanPham.pdb
+D:\BaiTapNhom\WpfApp_QuanLySanPham\WpfApp_QuanLySanPham\obj\Debug\MainWindow.baml
+D:\BaiTapNhom\WpfApp_QuanLySanPham\WpfApp_QuanLySanPham\obj\Debug\WpfApp_QuanLySanPham.g.resources
+D:\BaiTapNhom\WpfApp_QuanLySanPham\WpfApp_QuanLySanPham\obj\Debug\WpfApp_QuanLySanPham.Properties.Resources.resources
+D:\BaiTapNhom\WpfApp_QuanLySanPham\WpfApp_QuanLySanPham\obj\Debug\WpfApp_QuanLySanPham.csproj.GenerateResource.cache
+D:\BaiTapNhom\WpfApp_QuanLySanPham\WpfApp_QuanLySanPham\obj\Debug\WpfApp_QuanLySanPham.csproj.CoreCompileInputs.cache
+D:\BaiTapNhom\WpfApp_QuanLySanPham\WpfApp_QuanLySanPham\obj\Debug\WpfApp_QuanLySanPham.exe
+D:\BaiTapNhom\WpfApp_QuanLySanPham\WpfApp_QuanLySanPham\obj\Debug\WpfApp_QuanLySanPham.pdb
+D:\WBF 464\BaiTapNhom\WpfApp_QuanLySanPham\WpfApp_QuanLySanPham\bin\Debug\WpfApp_QuanLySanPham.exe.config
+D:\WBF 464\BaiTapNhom\WpfApp_QuanLySanPham\WpfApp_QuanLySanPham\bin\Debug\WpfApp_QuanLySanPham.exe
+D:\WBF 464\BaiTapNhom\WpfApp_QuanLySanPham\WpfApp_QuanLySanPham\bin\Debug\WpfApp_QuanLySanPham.pdb
+D:\WBF 464\BaiTapNhom\WpfApp_QuanLySanPham\WpfApp_QuanLySanPham\obj\Debug\WpfApp_QuanLySanPham.csprojAssemblyReference.cache
+D:\WBF 464\BaiTapNhom\WpfApp_QuanLySanPham\WpfApp_QuanLySanPham\obj\Debug\MainWindow.g.cs
+D:\WBF 464\BaiTapNhom\WpfApp_QuanLySanPham\WpfApp_QuanLySanPham\obj\Debug\App.g.cs
+D:\WBF 464\BaiTapNhom\WpfApp_QuanLySanPham\WpfApp_QuanLySanPham\obj\Debug\WpfApp_QuanLySanPham_MarkupCompile.cache
+D:\WBF 464\BaiTapNhom\WpfApp_QuanLySanPham\WpfApp_QuanLySanPham\obj\Debug\WpfApp_QuanLySanPham_MarkupCompile.lref
+D:\WBF 464\BaiTapNhom\WpfApp_QuanLySanPham\WpfApp_QuanLySanPham\obj\Debug\MainWindow.baml
+D:\WBF 464\BaiTapNhom\WpfApp_QuanLySanPham\WpfApp_QuanLySanPham\obj\Debug\WpfApp_QuanLySanPham.g.resources
+D:\WBF 464\BaiTapNhom\WpfApp_QuanLySanPham\WpfApp_QuanLySanPham\obj\Debug\WpfApp_QuanLySanPham.Properties.Resources.resources
+D:\WBF 464\BaiTapNhom\WpfApp_QuanLySanPham\WpfApp_QuanLySanPham\obj\Debug\WpfApp_QuanLySanPham.csproj.GenerateResource.cache
+D:\WBF 464\BaiTapNhom\WpfApp_QuanLySanPham\WpfApp_QuanLySanPham\obj\Debug\WpfApp_QuanLySanPham.csproj.CoreCompileInputs.cache
+D:\WBF 464\BaiTapNhom\WpfApp_QuanLySanPham\WpfApp_QuanLySanPham\obj\Debug\WpfApp_QuanLySanPham.exe
+D:\WBF 464\BaiTapNhom\WpfApp_QuanLySanPham\WpfApp_QuanLySanPham\obj\Debug\WpfApp_QuanLySanPham.pdb
