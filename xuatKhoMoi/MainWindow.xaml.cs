@@ -3,6 +3,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
+using Microsoft.VisualBasic;
 
 namespace xuatKhoMoi
 {
@@ -19,10 +20,43 @@ namespace xuatKhoMoi
             dp_ngayXuat.SelectedDate = DateTime.Now;
 
             LoadSanPham();
+            LoadNhanVien();
+
+            txt_maPhieuXuat.Text = TaoMaPhieu(); // auto mã
         }
 
         //-------------------------------------------------
-        // LOAD DANH SÁCH SẢN PHẨM
+        // AUTO MÃ PHIẾU
+        //-------------------------------------------------
+        string TaoMaPhieu()
+        {
+            return "PX" + DateTime.Now.ToString("yyyyMMddHHmmssfff");
+        }
+
+        //-------------------------------------------------
+        // LOAD NHÂN VIÊN
+        //-------------------------------------------------
+        void LoadNhanVien()
+        {
+            using (MySqlConnection conn = DBConnection.GetConnection())
+            {
+                conn.Open();
+
+                string sql = "select MaNV from nhanvien";
+                MySqlCommand cmd = new MySqlCommand(sql, conn);
+                MySqlDataReader rd = cmd.ExecuteReader();
+
+                cb_nhanVien.Items.Clear();
+
+                while (rd.Read())
+                {
+                    cb_nhanVien.Items.Add(rd["MaNV"].ToString());
+                }
+            }
+        }
+
+        //-------------------------------------------------
+        // LOAD SẢN PHẨM
         //-------------------------------------------------
         void LoadSanPham()
         {
@@ -35,13 +69,13 @@ namespace xuatKhoMoi
                 MySqlDataReader rd = cmd.ExecuteReader();
 
                 comboBox_sanPham.Items.Clear();
+
+                // placeholder
                 comboBox_sanPham.Items.Add(new SanPhamItem()
                 {
                     MaSP = "",
                     TenSP = "-- Lựa chọn sản phẩm --"
                 });
-
-                comboBox_sanPham.SelectedIndex = 0;
 
                 while (rd.Read())
                 {
@@ -52,18 +86,51 @@ namespace xuatKhoMoi
                     });
                 }
 
-                SanPhamItem sp = (SanPhamItem)comboBox_sanPham.SelectedItem;
-
-                if (sp.MaSP == "")
-                {
-                    MessageBox.Show("Hãy chọn sản phẩm");
-                    return;
-                }
+                comboBox_sanPham.DisplayMemberPath = "TenSP";
+                comboBox_sanPham.SelectedIndex = 0;
             }
         }
 
         //-------------------------------------------------
-        // TÍNH TỔNG TIỀN
+        // KIỂM TRA KHÁCH HÀNG
+        //-------------------------------------------------
+        bool KiemTraKhachHang(string maKH)
+        {
+            using (MySqlConnection conn = DBConnection.GetConnection())
+            {
+                conn.Open();
+
+                string sql = "select count(*) from khachhang where MaKH=@ma";
+                MySqlCommand cmd = new MySqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@ma", maKH);
+
+                return Convert.ToInt32(cmd.ExecuteScalar()) > 0;
+            }
+        }
+
+        //-------------------------------------------------
+        // THÊM KHÁCH HÀNG
+        //-------------------------------------------------
+        void ThemKhachHangMoi(string maKH, string tenKH)
+        {
+            using (MySqlConnection conn = DBConnection.GetConnection())
+            {
+                conn.Open();
+
+                string sql = @"insert into khachhang
+                               (MaKH, TenKH)
+                               values(@ma,@ten)";
+
+                MySqlCommand cmd = new MySqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@ma", maKH);
+                cmd.Parameters.AddWithValue("@ten", tenKH);
+
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        //-------------------------------------------------
+        // TÍNH TỔNG
         //-------------------------------------------------
         void TinhTongTien()
         {
@@ -72,58 +139,22 @@ namespace xuatKhoMoi
         }
 
         //-------------------------------------------------
-        // KIỂM TRA TRÙNG MÃ PHIẾU
+        // RESET FORM
         //-------------------------------------------------
-        bool KiemTraMaPhieuTonTai(string ma)
+        void ResetForm()
         {
-            using (MySqlConnection conn = DBConnection.GetConnection())
-            {
-                conn.Open();
+            txt_maPhieuXuat.Text = TaoMaPhieu();
 
-                string sql = "select count(*) from phieuxuat where MaPhieuXuat=@ma";
-                MySqlCommand cmd = new MySqlCommand(sql, conn);
-                cmd.Parameters.AddWithValue("@ma", ma);
+            txt_khachHang.Text = "";
+            txt_ghiChu.Text = "";
 
-                int count = Convert.ToInt32(cmd.ExecuteScalar());
-                return count > 0;
-            }
-        }
+            txt_soLuong.Text = "Số lượng";
+            txt_donGia.Text = "Đơn giá";
 
-        //-------------------------------------------------
-        // LOAD CHI TIẾT TỪ DATABASE
-        //-------------------------------------------------
-        void LoadChiTietFromDB(string maPhieu)
-        {
+            txt_tongTien.Text = "";
+
             danhSach.Clear();
-
-            using (MySqlConnection conn = DBConnection.GetConnection())
-            {
-                conn.Open();
-
-                string sql = @"
-                select ct.MaSP, sp.TenSP, ct.SoLuong, ct.DonGia
-                from ct_phieuxuat ct
-                join sanpham sp on ct.MaSP = sp.MaSP
-                where ct.MaPhieuXuat=@ma";
-
-                MySqlCommand cmd = new MySqlCommand(sql, conn);
-                cmd.Parameters.AddWithValue("@ma", maPhieu);
-
-                MySqlDataReader rd = cmd.ExecuteReader();
-
-                while (rd.Read())
-                {
-                    danhSach.Add(new ChiTietXuat
-                    {
-                        MaSP = rd["MaSP"].ToString(),
-                        TenSP = rd["TenSP"].ToString(),
-                        SoLuong = Convert.ToInt32(rd["SoLuong"]),
-                        DonGia = Convert.ToDecimal(rd["DonGia"])
-                    });
-                }
-            }
-
-            TinhTongTien();
+            comboBox_sanPham.SelectedIndex = 0;
         }
 
         //-------------------------------------------------
@@ -137,19 +168,27 @@ namespace xuatKhoMoi
                 return;
             }
 
-            if (!int.TryParse(txt_soLuong.Text, out int soLuong))
+            SanPhamItem sp = (SanPhamItem)comboBox_sanPham.SelectedItem;
+
+            if (sp.MaSP == "")
+            {
+                MessageBox.Show("Chưa chọn sản phẩm");
+                return;
+            }
+
+            if (txt_soLuong.Text == "Số lượng" ||
+                !int.TryParse(txt_soLuong.Text, out int soLuong))
             {
                 MessageBox.Show("Sai số lượng");
                 return;
             }
 
-            if (!decimal.TryParse(txt_donGia.Text, out decimal donGia))
+            if (txt_donGia.Text == "Đơn giá" ||
+                !decimal.TryParse(txt_donGia.Text, out decimal donGia))
             {
                 MessageBox.Show("Sai đơn giá");
                 return;
             }
-
-            SanPhamItem sp = (SanPhamItem)comboBox_sanPham.SelectedItem;
 
             danhSach.Add(new ChiTietXuat
             {
@@ -160,6 +199,10 @@ namespace xuatKhoMoi
             });
 
             TinhTongTien();
+
+            txt_soLuong.Text = "Số lượng";
+            txt_donGia.Text = "Đơn giá";
+            comboBox_sanPham.SelectedIndex = 0;
         }
 
         //-------------------------------------------------
@@ -167,22 +210,49 @@ namespace xuatKhoMoi
         //-------------------------------------------------
         private void bt_luu_Click(object sender, RoutedEventArgs e)
         {
-            if (txt_maPhieuXuat.Text == "")
-            {
-                MessageBox.Show("Chưa nhập mã phiếu");
-                return;
-            }
-
             if (danhSach.Count == 0)
             {
                 MessageBox.Show("Chưa có sản phẩm");
                 return;
             }
 
-            if (KiemTraMaPhieuTonTai(txt_maPhieuXuat.Text))
+            if (cb_nhanVien.SelectedItem == null)
             {
-                MessageBox.Show("Mã phiếu đã tồn tại");
+                MessageBox.Show("Chọn nhân viên");
                 return;
+            }
+
+            if (txt_khachHang.Text == "")
+            {
+                MessageBox.Show("Nhập khách hàng");
+                return;
+            }
+
+            //---------------------------------------
+            // tạo khách hàng nếu chưa tồn tại
+            //---------------------------------------
+            if (!KiemTraKhachHang(txt_khachHang.Text))
+            {
+                var result = MessageBox.Show(
+                    "Khách hàng chưa tồn tại. Tạo mới?",
+                    "Thông báo",
+                    MessageBoxButton.YesNo);
+
+                if (result == MessageBoxResult.No)
+                    return;
+
+                string tenKH = Interaction.InputBox(
+                    "Nhập tên khách hàng:",
+                    "Tạo khách hàng mới",
+                    "");
+
+                if (tenKH.Trim() == "")
+                {
+                    MessageBox.Show("Chưa nhập tên khách hàng");
+                    return;
+                }
+
+                ThemKhachHangMoi(txt_khachHang.Text, tenKH);
             }
 
             using (MySqlConnection conn = DBConnection.GetConnection())
@@ -196,15 +266,17 @@ namespace xuatKhoMoi
                     // insert phiếu
                     //---------------------------------------
                     string sqlPX = @"insert into phieuxuat
-                    (MaPhieuXuat, NgayXuat, GhiChu)
+                    (MaPhieuXuat, NgayXuat, MaNV, MaKH, GhiChu)
                     values
-                    (@Ma,@Ngay,@GhiChu)";
+                    (@Ma,@Ngay,@MaNV,@MaKH,@GhiChu)";
 
                     MySqlCommand cmdPX =
                         new MySqlCommand(sqlPX, conn, tran);
 
                     cmdPX.Parameters.AddWithValue("@Ma", txt_maPhieuXuat.Text);
                     cmdPX.Parameters.AddWithValue("@Ngay", dp_ngayXuat.SelectedDate);
+                    cmdPX.Parameters.AddWithValue("@MaNV", cb_nhanVien.SelectedItem.ToString());
+                    cmdPX.Parameters.AddWithValue("@MaKH", txt_khachHang.Text);
                     cmdPX.Parameters.AddWithValue("@GhiChu", txt_ghiChu.Text);
 
                     cmdPX.ExecuteNonQuery();
@@ -234,7 +306,7 @@ namespace xuatKhoMoi
 
                     MessageBox.Show("Lưu thành công");
 
-                    LoadChiTietFromDB(txt_maPhieuXuat.Text);
+                    ResetForm();   // cực quan trọng
                 }
                 catch (Exception ex)
                 {
@@ -249,15 +321,7 @@ namespace xuatKhoMoi
         //-------------------------------------------------
         private void bt_taoMoi_Click(object sender, RoutedEventArgs e)
         {
-            txt_maPhieuXuat.Text = "";
-            txt_ghiChu.Text = "";
-            dp_ngayXuat.SelectedDate = DateTime.Now;
-
-            txt_soLuong.Text = "Số lượng";
-            txt_donGia.Text = "Đơn giá";
-
-            danhSach.Clear();
-            txt_tongTien.Text = "";
+            ResetForm();
         }
 
         //-------------------------------------------------
@@ -269,7 +333,7 @@ namespace xuatKhoMoi
         }
 
         //-------------------------------------------------
-        // PLACEHOLDER EVENTS
+        // PLACEHOLDER
         //-------------------------------------------------
         private void txt_soLuong_GotFocus(object sender, RoutedEventArgs e)
         {
