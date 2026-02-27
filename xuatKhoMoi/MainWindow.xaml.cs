@@ -35,6 +35,13 @@ namespace xuatKhoMoi
                 MySqlDataReader rd = cmd.ExecuteReader();
 
                 comboBox_sanPham.Items.Clear();
+                comboBox_sanPham.Items.Add(new SanPhamItem()
+                {
+                    MaSP = "",
+                    TenSP = "-- Lựa chọn sản phẩm --"
+                });
+
+                comboBox_sanPham.SelectedIndex = 0;
 
                 while (rd.Read())
                 {
@@ -43,6 +50,14 @@ namespace xuatKhoMoi
                         MaSP = rd["MaSP"].ToString(),
                         TenSP = rd["TenSP"].ToString()
                     });
+                }
+
+                SanPhamItem sp = (SanPhamItem)comboBox_sanPham.SelectedItem;
+
+                if (sp.MaSP == "")
+                {
+                    MessageBox.Show("Hãy chọn sản phẩm");
+                    return;
                 }
             }
         }

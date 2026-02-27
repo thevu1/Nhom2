@@ -101,9 +101,18 @@
 
                     <!-- SẢN PHẨM -->
                     <ComboBox x:Name="comboBox_sanPham"
-                              Grid.Column="0"
-                              Height="30"
-                              Margin="5"/>
+                                Grid.Column="0"
+                                Height="30"
+                                Margin="5"
+                                HorizontalContentAlignment="Center"
+                                VerticalContentAlignment="Center">
+
+                        <ComboBox.Resources>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="TextAlignment" Value="Center"/>
+                            </Style>
+                        </ComboBox.Resources>
+                    </ComboBox>
 
                     <!-- SỐ LƯỢNG -->
                     <TextBox x:Name="txt_soLuong"
