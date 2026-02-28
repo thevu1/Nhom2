@@ -2,9 +2,9 @@
 
 namespace group
 {
-    public partial class SupplierWindow : Window
+    public partial class NhaCungCap : Window
     {
-        public SupplierWindow()
+        public NhaCungCap()
         {
             InitializeComponent();
         }

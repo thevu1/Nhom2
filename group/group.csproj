@@ -55,6 +55,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="TrangChu.xaml.cs">
+      <DependentUpon>TrangChu.xaml</DependentUpon>
+    </Compile>
     <Page Include="DangNhap.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -77,10 +80,15 @@
     <Compile Include="QuenMatKhau.xaml.cs">
       <DependentUpon>QuenMatKhau.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Session.cs" />
     <Compile Include="SupplierWindow.xaml.cs">
       <DependentUpon>SupplierWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="TrangChu.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -107,6 +115,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\banphim.jpg" />
+    <Resource Include="Images\chuot.jpg" />
+    <Resource Include="Images\laptop.png" />
+    <Resource Include="Images\manhinh.jpg" />
+    <Resource Include="Images\tainghe.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

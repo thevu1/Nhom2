@@ -1,4 +1,4 @@
-﻿<Window x:Class="group.LoginWindow"
+﻿<Window x:Class="group.DangNhap"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Đăng nhập" Height="250" Width="400">

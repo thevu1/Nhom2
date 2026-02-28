@@ -17,9 +17,9 @@ namespace group
     /// <summary>
     /// Interaction logic for QuenMatKhau.xaml
     /// </summary>
-    public partial class ForgotPasswordWindow : Window
+    public partial class QuenMatKhau : Window
     {
-        public ForgotPasswordWindow()
+        public QuenMatKhau()
         {
             InitializeComponent();
         }

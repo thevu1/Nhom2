@@ -17,22 +17,47 @@ namespace group
     /// <summary>
     /// Interaction logic for DangNhap.xaml
     /// </summary>
-    public partial class LoginWindow : Window
+    public partial class DangNhap : Window
     {
-        public LoginWindow()
+        public DangNhap()
         {
             InitializeComponent();
         }
 
         private void BtnLogin_Click(object sender, RoutedEventArgs e)
         {
-            // TODO: xử lý đăng nhập
-            MessageBox.Show("Đăng nhập");
+            string username = txtUsername.Text.Trim();
+            string password = txtPassword.Password.Trim();
+
+            if (username == "" || password == "")
+            {
+                MessageBox.Show("Vui lòng nhập đầy đủ thông tin!");
+                return;
+            }
+
+            if (username == "admin" && password == "123")
+            {
+                Session.Username = username;
+                Session.Role = "Admin";
+
+                TrangChu main = new TrangChu();
+                main.Show();
+                this.Close();
+            }
+            else
+            {
+                MessageBox.Show("Sai tài khoản hoặc mật khẩu!");
+            }
         }
 
         private void BtnForget_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Quên mật khẩu");
+            QuenMatKhau forgot = new QuenMatKhau();
+            this.Hide();
+
+            forgot.ShowDialog();
+
+            this.Show();
         }
 
         private void BtnExit_Click(object sender, RoutedEventArgs e)
