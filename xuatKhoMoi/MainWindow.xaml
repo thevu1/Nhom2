@@ -122,6 +122,7 @@
                                 Grid.Column="0"
                                 Height="30"
                                 Margin="5"
+                                SelectionChanged="comboBox_mucLuc_SelectionChanged"
                                 HorizontalContentAlignment="Center"
                                 VerticalContentAlignment="Center">
 
