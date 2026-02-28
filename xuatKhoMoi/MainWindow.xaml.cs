@@ -3,7 +3,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
-using Microsoft.VisualBasic;
+using System.Windows.Controls;
 
 namespace xuatKhoMoi
 {
@@ -19,23 +19,23 @@ namespace xuatKhoMoi
             dg_chiTiet.ItemsSource = danhSach;
             dp_ngayXuat.SelectedDate = DateTime.Now;
 
-            LoadSanPham();
+            LoadDanhMuc();
             LoadNhanVien();
 
-            txt_maPhieuXuat.Text = TaoMaPhieu(); // auto mã
+            txt_maPhieuXuat.Text = TaoMaPhieu();
         }
 
-        //-------------------------------------------------
+        //-----------------------------------
         // AUTO MÃ PHIẾU
-        //-------------------------------------------------
+        //-----------------------------------
         string TaoMaPhieu()
         {
             return "PX" + DateTime.Now.ToString("yyyyMMddHHmmssfff");
         }
 
-        //-------------------------------------------------
+        //-----------------------------------
         // LOAD NHÂN VIÊN
-        //-------------------------------------------------
+        //-----------------------------------
         void LoadNhanVien()
         {
             using (MySqlConnection conn = DBConnection.GetConnection())
@@ -49,33 +49,58 @@ namespace xuatKhoMoi
                 cb_nhanVien.Items.Clear();
 
                 while (rd.Read())
-                {
                     cb_nhanVien.Items.Add(rd["MaNV"].ToString());
-                }
             }
         }
 
-        //-------------------------------------------------
-        // LOAD SẢN PHẨM
-        //-------------------------------------------------
-        void LoadSanPham()
+        //-----------------------------------
+        // LOAD DANH MỤC
+        //-----------------------------------
+        void LoadDanhMuc()
         {
             using (MySqlConnection conn = DBConnection.GetConnection())
             {
                 conn.Open();
 
-                string sql = "select MaSP, TenSP from sanpham";
+                string sql = "select MaDanhMuc, TenDanhMuc from danhmuc";
+
                 MySqlCommand cmd = new MySqlCommand(sql, conn);
                 MySqlDataReader rd = cmd.ExecuteReader();
 
-                comboBox_sanPham.Items.Clear();
+                comboBox_mucLuc.Items.Clear();
 
-                // placeholder
-                comboBox_sanPham.Items.Add(new SanPhamItem()
+                while (rd.Read())
                 {
-                    MaSP = "",
-                    TenSP = "-- Lựa chọn sản phẩm --"
-                });
+                    comboBox_mucLuc.Items.Add(new DanhMucItem()
+                    {
+                        MaDanhMuc = rd["MaDanhMuc"].ToString(),
+                        TenDanhMuc = rd["TenDanhMuc"].ToString()
+                    });
+                }
+
+                comboBox_mucLuc.DisplayMemberPath = "TenDanhMuc";
+            }
+        }
+
+        //-----------------------------------
+        // LOAD SẢN PHẨM THEO DANH MỤC
+        //-----------------------------------
+        void LoadSanPhamTheoDanhMuc(string maDanhMuc)
+        {
+            using (MySqlConnection conn = DBConnection.GetConnection())
+            {
+                conn.Open();
+
+                string sql = @"select MaSP, TenSP 
+                       from sanpham
+                       where MaDanhMuc=@ma";
+
+                MySqlCommand cmd = new MySqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@ma", maDanhMuc);
+
+                MySqlDataReader rd = cmd.ExecuteReader();
+
+                comboBox_sanPham.Items.Clear();
 
                 while (rd.Read())
                 {
@@ -87,79 +112,25 @@ namespace xuatKhoMoi
                 }
 
                 comboBox_sanPham.DisplayMemberPath = "TenSP";
-                comboBox_sanPham.SelectedIndex = 0;
             }
         }
 
-        //-------------------------------------------------
-        // KIỂM TRA KHÁCH HÀNG
-        //-------------------------------------------------
-        bool KiemTraKhachHang(string maKH)
+        //-----------------------------------
+        // CHỌN DANH MỤC
+        //-----------------------------------
+        private void comboBox_mucLuc_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            using (MySqlConnection conn = DBConnection.GetConnection())
-            {
-                conn.Open();
+            if (comboBox_mucLuc.SelectedItem == null)
+                return;
 
-                string sql = "select count(*) from khachhang where MaKH=@ma";
-                MySqlCommand cmd = new MySqlCommand(sql, conn);
-                cmd.Parameters.AddWithValue("@ma", maKH);
+            DanhMucItem dm = (DanhMucItem)comboBox_mucLuc.SelectedItem;
 
-                return Convert.ToInt32(cmd.ExecuteScalar()) > 0;
-            }
+            LoadSanPhamTheoDanhMuc(dm.MaDanhMuc);
         }
 
-        //-------------------------------------------------
-        // THÊM KHÁCH HÀNG
-        //-------------------------------------------------
-        void ThemKhachHangMoi(string maKH, string tenKH)
-        {
-            using (MySqlConnection conn = DBConnection.GetConnection())
-            {
-                conn.Open();
-
-                string sql = @"insert into khachhang
-                               (MaKH, TenKH)
-                               values(@ma,@ten)";
-
-                MySqlCommand cmd = new MySqlCommand(sql, conn);
-                cmd.Parameters.AddWithValue("@ma", maKH);
-                cmd.Parameters.AddWithValue("@ten", tenKH);
-
-                cmd.ExecuteNonQuery();
-            }
-        }
-
-        //-------------------------------------------------
-        // TÍNH TỔNG
-        //-------------------------------------------------
-        void TinhTongTien()
-        {
-            decimal tong = danhSach.Sum(x => x.ThanhTien);
-            txt_tongTien.Text = tong.ToString("N0");
-        }
-
-        //-------------------------------------------------
-        // RESET FORM
-        //-------------------------------------------------
-        void ResetForm()
-        {
-            txt_maPhieuXuat.Text = TaoMaPhieu();
-
-            txt_khachHang.Text = "";
-            txt_ghiChu.Text = "";
-
-            txt_soLuong.Text = "Số lượng";
-            txt_donGia.Text = "Đơn giá";
-
-            txt_tongTien.Text = "";
-
-            danhSach.Clear();
-            comboBox_sanPham.SelectedIndex = 0;
-        }
-
-        //-------------------------------------------------
+        //-----------------------------------
         // THÊM SẢN PHẨM
-        //-------------------------------------------------
+        //-----------------------------------
         private void bt_themSanPham_Click(object sender, RoutedEventArgs e)
         {
             if (comboBox_sanPham.SelectedItem == null)
@@ -168,29 +139,22 @@ namespace xuatKhoMoi
                 return;
             }
 
-            SanPhamItem sp = (SanPhamItem)comboBox_sanPham.SelectedItem;
-
-            if (sp.MaSP == "")
-            {
-                MessageBox.Show("Chưa chọn sản phẩm");
-                return;
-            }
-
-            if (txt_soLuong.Text == "Số lượng" ||
-                !int.TryParse(txt_soLuong.Text, out int soLuong))
+            if (!int.TryParse(txt_soLuong.Text, out int soLuong))
             {
                 MessageBox.Show("Sai số lượng");
                 return;
             }
 
-            if (txt_donGia.Text == "Đơn giá" ||
-                !decimal.TryParse(txt_donGia.Text, out decimal donGia))
+            if (!decimal.TryParse(txt_donGia.Text, out decimal donGia))
             {
                 MessageBox.Show("Sai đơn giá");
                 return;
             }
 
-            danhSach.Add(new ChiTietXuat
+            SanPhamItem sp =
+                (SanPhamItem)comboBox_sanPham.SelectedItem;
+
+            danhSach.Add(new ChiTietXuat()
             {
                 MaSP = sp.MaSP,
                 TenSP = sp.TenSP,
@@ -199,60 +163,36 @@ namespace xuatKhoMoi
             });
 
             TinhTongTien();
-
-            txt_soLuong.Text = "Số lượng";
-            txt_donGia.Text = "Đơn giá";
-            comboBox_sanPham.SelectedIndex = 0;
         }
 
-        //-------------------------------------------------
+        //-----------------------------------
+        // TÍNH TỔNG
+        //-----------------------------------
+        void TinhTongTien()
+        {
+            decimal tong = danhSach.Sum(x => x.ThanhTien);
+            txt_tongTien.Text = tong.ToString("N0");
+        }
+
+        //-----------------------------------
+        // RESET
+        //-----------------------------------
+        void ResetForm()
+        {
+            danhSach.Clear();
+            txt_maPhieuXuat.Text = TaoMaPhieu();
+            txt_tongTien.Text = "";
+        }
+
+        //-----------------------------------
         // LƯU PHIẾU
-        //-------------------------------------------------
+        //-----------------------------------
         private void bt_luu_Click(object sender, RoutedEventArgs e)
         {
             if (danhSach.Count == 0)
             {
                 MessageBox.Show("Chưa có sản phẩm");
                 return;
-            }
-
-            if (cb_nhanVien.SelectedItem == null)
-            {
-                MessageBox.Show("Chọn nhân viên");
-                return;
-            }
-
-            if (txt_khachHang.Text == "")
-            {
-                MessageBox.Show("Nhập khách hàng");
-                return;
-            }
-
-            //---------------------------------------
-            // tạo khách hàng nếu chưa tồn tại
-            //---------------------------------------
-            if (!KiemTraKhachHang(txt_khachHang.Text))
-            {
-                var result = MessageBox.Show(
-                    "Khách hàng chưa tồn tại. Tạo mới?",
-                    "Thông báo",
-                    MessageBoxButton.YesNo);
-
-                if (result == MessageBoxResult.No)
-                    return;
-
-                string tenKH = Interaction.InputBox(
-                    "Nhập tên khách hàng:",
-                    "Tạo khách hàng mới",
-                    "");
-
-                if (tenKH.Trim() == "")
-                {
-                    MessageBox.Show("Chưa nhập tên khách hàng");
-                    return;
-                }
-
-                ThemKhachHangMoi(txt_khachHang.Text, tenKH);
             }
 
             using (MySqlConnection conn = DBConnection.GetConnection())
@@ -262,40 +202,38 @@ namespace xuatKhoMoi
 
                 try
                 {
-                    //---------------------------------------
-                    // insert phiếu
-                    //---------------------------------------
+                    //-----------------------------------
+                    // PHIẾU
+                    //-----------------------------------
                     string sqlPX = @"insert into phieuxuat
-                    (MaPhieuXuat, NgayXuat, MaNV, MaKH, GhiChu)
+                    (MaPhieuXuat, NgayXuat, MaNV)
                     values
-                    (@Ma,@Ngay,@MaNV,@MaKH,@GhiChu)";
+                    (@Ma,@Ngay,@NV)";
 
                     MySqlCommand cmdPX =
                         new MySqlCommand(sqlPX, conn, tran);
 
                     cmdPX.Parameters.AddWithValue("@Ma", txt_maPhieuXuat.Text);
                     cmdPX.Parameters.AddWithValue("@Ngay", dp_ngayXuat.SelectedDate);
-                    cmdPX.Parameters.AddWithValue("@MaNV", cb_nhanVien.SelectedItem.ToString());
-                    cmdPX.Parameters.AddWithValue("@MaKH", txt_khachHang.Text);
-                    cmdPX.Parameters.AddWithValue("@GhiChu", txt_ghiChu.Text);
+                    cmdPX.Parameters.AddWithValue("@NV", cb_nhanVien.SelectedItem.ToString());
 
                     cmdPX.ExecuteNonQuery();
 
-                    //---------------------------------------
-                    // insert chi tiết
-                    //---------------------------------------
+                    //-----------------------------------
+                    // CHI TIẾT
+                    //-----------------------------------
                     foreach (var item in danhSach)
                     {
                         string sqlCT = @"insert into ct_phieuxuat
                         (MaPhieuXuat, MaSP, SoLuong, DonGia)
                         values
-                        (@Ma,@MaSP,@SL,@DG)";
+                        (@Ma,@SP,@SL,@DG)";
 
                         MySqlCommand cmdCT =
                             new MySqlCommand(sqlCT, conn, tran);
 
                         cmdCT.Parameters.AddWithValue("@Ma", txt_maPhieuXuat.Text);
-                        cmdCT.Parameters.AddWithValue("@MaSP", item.MaSP);
+                        cmdCT.Parameters.AddWithValue("@SP", item.MaSP);
                         cmdCT.Parameters.AddWithValue("@SL", item.SoLuong);
                         cmdCT.Parameters.AddWithValue("@DG", item.DonGia);
 
@@ -305,8 +243,7 @@ namespace xuatKhoMoi
                     tran.Commit();
 
                     MessageBox.Show("Lưu thành công");
-
-                    ResetForm();   // cực quan trọng
+                    ResetForm();
                 }
                 catch (Exception ex)
                 {
@@ -316,24 +253,17 @@ namespace xuatKhoMoi
             }
         }
 
-        //-------------------------------------------------
-        // TẠO MỚI
-        //-------------------------------------------------
         private void bt_taoMoi_Click(object sender, RoutedEventArgs e)
         {
             ResetForm();
         }
 
-        //-------------------------------------------------
-        // THOÁT
-        //-------------------------------------------------
         private void bt_thoat_Click(object sender, RoutedEventArgs e)
         {
             Close();
         }
-
         //-------------------------------------------------
-        // PLACEHOLDER
+        // PLACEHOLDER SỐ LƯỢNG
         //-------------------------------------------------
         private void txt_soLuong_GotFocus(object sender, RoutedEventArgs e)
         {
@@ -347,6 +277,9 @@ namespace xuatKhoMoi
                 txt_soLuong.Text = "Số lượng";
         }
 
+        //-------------------------------------------------
+        // PLACEHOLDER ĐƠN GIÁ
+        //-------------------------------------------------
         private void txt_donGia_GotFocus(object sender, RoutedEventArgs e)
         {
             if (txt_donGia.Text == "Đơn giá")
