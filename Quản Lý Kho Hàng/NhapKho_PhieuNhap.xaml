@@ -157,8 +157,8 @@
 
                             
                             <StackPanel Grid.Column="12" Orientation="Horizontal" HorizontalAlignment="Right">
-                                <Button x:Name="btnThem" Content="Thêm" Width="80" Height="34" Margin="0,0,8,0"/>
-                                <Button x:Name="btnXoa" Content="Xóa" Width="80" Height="34"/>
+                                <Button x:Name="btnThem" Content="Thêm" Width="80" Height="34" Margin="0,0,8,0" Click="btnThem_Click"/>
+                                <Button x:Name="btnXoa" Content="Xóa" Width="80" Height="34" Click="btnXoa_Click"/>
                             </StackPanel>
                         </Grid>
                     </Border>
@@ -191,10 +191,10 @@
                              IsReadOnly="True"/>
 
                     <StackPanel Grid.Column="3" Orientation="Horizontal" HorizontalAlignment="Right">
-                        <Button x:Name="btnTaoMoi" Content="Tạo mới" Width="90" Height="36" Margin="0,0,8,0"/>
-                        <Button x:Name="btnLuuPhieu" Content="Lưu phiếu" Width="90" Height="36" Margin="0,0,8,0"/>
-                        <Button x:Name="btnIn" Content="In" Width="70" Height="36" Margin="0,0,8,0"/>
-                        <Button x:Name="btnThoat" Content="Thoát" Width="80" Height="36"/>
+                        <Button x:Name="btnTaoMoi" Content="Tạo mới" Width="90" Height="36" Margin="0,0,8,0" Click="btnTaoMoi_Click"/>
+                        <Button x:Name="btnLuuPhieu" Content="Lưu phiếu" Width="90" Height="36" Margin="0,0,8,0" Click="btnLuuPhieu_Click"/>
+                        <Button x:Name="btnIn" Content="In" Width="70" Height="36" Margin="0,0,8,0" Click="btnIn_Click"/>
+                        <Button x:Name="btnThoat" Content="Thoát" Width="80" Height="36" Click="btnThoat_Click"/>
                     </StackPanel>
                 </Grid>
             </Border>
