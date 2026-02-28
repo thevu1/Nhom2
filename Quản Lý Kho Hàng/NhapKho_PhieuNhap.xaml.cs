@@ -21,8 +21,37 @@ namespace Quản_Lý_Kho_Hàng
         public NhapKho_PhieuNhap()
         {
             InitializeComponent();
+            List<string> danhSachNhaCungCap = new List<string>
+    {
+        "Nhà cung cấp 1",
+        "Nhà cung cấp 2",
+        "Nhà cung cấp 3"
+    };
 
+            // Gán dữ liệu vào ComboBox
+            cboNCC.ItemsSource = danhSachNhaCungCap;
+
+            // Nếu bạn muốn chọn mặc định, có thể sử dụng SelectedIndex hoặc SelectedItem
+            cboNCC.SelectedIndex = 0; // Chọn nhà cung cấp đầu tiên
             // Tự tính thành tiền khi nhập
+            List<string> danhSachNguoiNhap = new List<string>
+    {
+        "Người nhập 1",
+        "Người nhập 2",
+        "Người nhập 3"
+    };
+
+            cboNguoiNhap.ItemsSource = danhSachNguoiNhap; // Gán dữ liệu vào ComboBox Người nhập
+            cboNguoiNhap.SelectedIndex = 0;  // Chọn mặc định người nhập đầu tiên
+            List<string> danhSachSanPham = new List<string>
+    {
+        "Sản phẩm 1",
+        "Sản phẩm 2",
+        "Sản phẩm 3"
+    };
+
+            cboSanPham.ItemsSource = danhSachSanPham; // Gán dữ liệu vào ComboBox Sản phẩm
+            cboSanPham.SelectedIndex = 0;  // Chọn mặc định sản phẩm đầu tiên
             txtSoLuong.TextChanged += (_, __) => TinhThanhTienTam();
             txtDonGia.TextChanged += (_, __) => TinhThanhTienTam();
         }
@@ -136,6 +165,7 @@ namespace Quản_Lý_Kho_Hàng
             };
 
             LuuPhieuJson(phieu);
+
             MessageBox.Show("Lưu phiếu thành công!");
         }
 

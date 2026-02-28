@@ -57,9 +57,7 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Text="Mã phiếu:" VerticalAlignment="Center"/>
-                            <TextBox Grid.Column="1" x:Name="txtMaPN"
-                                     Height="32" VerticalContentAlignment="Center"
-                                     IsReadOnly="True"/>
+                            <TextBox Grid.Column="1" x:Name="txtMaPN" Height="32" VerticalContentAlignment="Center" IsReadOnly="False"/>
                         </Grid>
 
                         <Grid Grid.Row="1" Margin="0,0,0,10">
