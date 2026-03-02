@@ -40,8 +40,8 @@
                 <Label Content="Tên sản phẩm:" Grid.Column="0" Grid.Row="1" Margin="3"/>
                 <TextBox x:Name="txtTenSP" Grid.Column="1" Grid.Row="1" Margin="3"/>
 
-                <Label Content="Ngày nhập:" Grid.Column="0" Grid.Row="2" Margin="3"/>
-                <DatePicker x:Name="dpNgayNhap" Grid.Column="1" Grid.Row="2" Margin="3"/>
+                <Label Content="Đơn vị tính:" Grid.Column="0" Grid.Row="2" Margin="3"/>
+                <ComboBox x:Name="cboDonVi" Grid.Column="1" Grid.Row="2" Margin="3" IsEditable="True"/>
 
                 <Label Content="Giá nhập:" Grid.Column="0" Grid.Row="3" Margin="3"/>
                 <TextBox x:Name="txtGiaNhap" Grid.Column="1" Grid.Row="3" Margin="3"/>
@@ -49,18 +49,15 @@
                 <Label Content="Giá bán:" Grid.Column="0" Grid.Row="4" Margin="3"/>
                 <TextBox x:Name="txtGiaBan" Grid.Column="1" Grid.Row="4" Margin="3"/>
 
-                <Label Content="Đơn vị tính:" Grid.Column="0" Grid.Row="5" Margin="3"/>
-                <ComboBox x:Name="cboDonVi" Grid.Column="1" Grid.Row="5" Margin="3" IsEditable="True"/>
+                <Label Content="Mã danh mục:" Grid.Column="0" Grid.Row="5" Margin="3"/>
+                <TextBox x:Name="txtMaDanhMuc" Grid.Column="1" Grid.Row="5" Margin="3"/>
             </Grid>
         </GroupBox>
 
         <!-- Chức năng -->
         <GroupBox Margin="10" Header="Chức năng" Grid.Column="1">
             <StackPanel Margin="10" VerticalAlignment="Center">
-                <!-- Ô nhập từ khóa tìm kiếm -->
-                <TextBox x:Name="txtTuKhoa" Margin="5" Padding="5" ToolTip="Nhập từ khóa tìm kiếm (mã hoặc tên)"/>
                 <Button Content="Tìm kiếm" x:Name="btnTimKiem" Margin="5" Padding="10,5" Click="btnTimKiem_Click"/>
-                <Button Content="Thêm" x:Name="btnThem" Margin="5" Padding="10,5" Click="btnThem_Click"/>
                 <Button Content="Sửa" x:Name="btnSua" Margin="5" Padding="10,5" Click="btnSua_Click"/>
                 <Button Content="Xóa" x:Name="btnXoa" Margin="5" Padding="10,5" Click="btnXoa_Click"/>
                 <Button Content="Làm mới" x:Name="btnLamMoi" Margin="5" Padding="10,5" Click="btnLamMoi_Click"/>
@@ -75,10 +72,11 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Mã SP" Binding="{Binding MSP}" Width="*"/>
                     <DataGridTextColumn Header="Tên SP" Binding="{Binding TENSP}" Width="*"/>
-                    <DataGridTextColumn Header="Ngày nhập" Binding="{Binding NgayNhap, StringFormat=dd/MM/yyyy}" Width="*"/>
+                    <DataGridTextColumn Header="Đơn vị" Binding="{Binding Donvi}" Width="*"/>
                     <DataGridTextColumn Header="Giá nhập" Binding="{Binding GiaNhap, StringFormat=N0}" Width="*"/>
                     <DataGridTextColumn Header="Giá bán" Binding="{Binding GiaBan, StringFormat=N0}" Width="*"/>
-                    <DataGridTextColumn Header="Đơn vị" Binding="{Binding Donvi}" Width="*"/>
+                    <DataGridTextColumn Header="Ngày nhập" Binding="{Binding NgayNhap, StringFormat='dd/MM/yyyy'}" Width="*"/>
+                    <DataGridTextColumn Header="Mã danh mục" Binding="{Binding MADM}" Width="*"/>
                 </DataGrid.Columns>
             </DataGrid>
         </GroupBox>

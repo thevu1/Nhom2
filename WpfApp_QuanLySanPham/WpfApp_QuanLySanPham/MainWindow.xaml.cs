@@ -21,14 +21,14 @@ namespace WpfApp_QuanLySanPham
             dgProducts.ItemsSource = _productView;
         }
 
-        // Khởi tạo dữ liệu mẫu
+        // Khởi tạo dữ liệu mẫu (đã thêm MADM)
         private void LoadData()
         {
             _products = new ObservableCollection<Product>
             {
-                new Product { MSP = "SP001", TENSP = "Sản phẩm 1", NgayNhap = DateTime.Now.AddDays(-10), GiaNhap = 10000, GiaBan = 15000, Donvi = "Cái" },
-                new Product { MSP = "SP002", TENSP = "Sản phẩm 2", NgayNhap = DateTime.Now.AddDays(-5), GiaNhap = 20000, GiaBan = 28000, Donvi = "Hộp" },
-                new Product { MSP = "SP003", TENSP = "Sản phẩm 3", NgayNhap = DateTime.Now, GiaNhap = 5000, GiaBan = 8000, Donvi = "Kg" }
+                new Product { MSP = "SP001", TENSP = "Sản phẩm 1", NgayNhap = DateTime.Now.AddDays(-10), GiaNhap = 10000, GiaBan = 15000, Donvi = "Cái", MADM = "DM01" },
+                new Product { MSP = "SP002", TENSP = "Sản phẩm 2", NgayNhap = DateTime.Now.AddDays(-5), GiaNhap = 20000, GiaBan = 28000, Donvi = "Hộp", MADM = "DM02" },
+                new Product { MSP = "SP003", TENSP = "Sản phẩm 3", NgayNhap = DateTime.Now, GiaNhap = 5000, GiaBan = 8000, Donvi = "Kg", MADM = "DM01" }
             };
         }
 
@@ -45,25 +45,19 @@ namespace WpfApp_QuanLySanPham
             {
                 string ma = txtMaSP.Text.Trim();
                 string ten = txtTenSP.Text.Trim();
-                DateTime? ngayNhap = dpNgayNhap.SelectedDate;
                 decimal giaNhap = decimal.Parse(txtGiaNhap.Text.Trim());
                 decimal giaBan = decimal.Parse(txtGiaBan.Text.Trim());
                 string donvi = cboDonVi.Text.Trim();
-
-                if (string.IsNullOrEmpty(ma) || string.IsNullOrEmpty(ten) || ngayNhap == null || string.IsNullOrEmpty(donvi))
-                {
-                    MessageBox.Show("Vui lòng nhập đầy đủ thông tin!", "Thiếu dữ liệu", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    return null;
-                }
+                string madm = txtMaDanhMuc.Text.Trim();   // đọc thêm mã danh mục
 
                 return new Product
                 {
                     MSP = ma,
                     TENSP = ten,
-                    NgayNhap = ngayNhap.Value,
                     GiaNhap = giaNhap,
                     GiaBan = giaBan,
-                    Donvi = donvi
+                    Donvi = donvi,
+                    MADM = madm
                 };
             }
             catch (FormatException)
@@ -73,38 +67,22 @@ namespace WpfApp_QuanLySanPham
             }
         }
 
-        // Xóa trắng form nhập
+        // Xóa trắng form nhập (đã thêm txtMaDanhMuc)
         private void ClearInput()
         {
             txtMaSP.Clear();
             txtTenSP.Clear();
-            dpNgayNhap.SelectedDate = null;
             txtGiaNhap.Clear();
             txtGiaBan.Clear();
             cboDonVi.SelectedIndex = -1;
             cboDonVi.Text = "";
+            txtMaDanhMuc.Clear();
         }
 
         // Kiểm tra trùng mã (loại trừ sản phẩm hiện tại khi sửa)
         private bool IsProductCodeExists(string code, Product exclude = null)
         {
             return _products.Any(p => p.MSP.Equals(code, StringComparison.OrdinalIgnoreCase) && p != exclude);
-        }
-
-        // Thêm sản phẩm
-        private void btnThem_Click(object sender, RoutedEventArgs e)
-        {
-            Product newProduct = GetProductFromInput();
-            if (newProduct == null) return;
-
-            if (IsProductCodeExists(newProduct.MSP))
-            {
-                MessageBox.Show("Mã sản phẩm đã tồn tại!", "Trùng mã", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
-            _products.Add(newProduct);
-            ClearInput();
         }
 
         // Sửa sản phẩm
@@ -126,13 +104,14 @@ namespace WpfApp_QuanLySanPham
                 return;
             }
 
-            // Cập nhật
+            // Cập nhật (bao gồm MADM)
             selected.MSP = updated.MSP;
             selected.TENSP = updated.TENSP;
             selected.NgayNhap = updated.NgayNhap;
             selected.GiaNhap = updated.GiaNhap;
             selected.GiaBan = updated.GiaBan;
             selected.Donvi = updated.Donvi;
+            selected.MADM = updated.MADM;
 
             _productView.Refresh();
             ClearInput();
@@ -157,14 +136,17 @@ namespace WpfApp_QuanLySanPham
             }
         }
 
-        // Tìm kiếm theo từ khóa (mã hoặc tên)
+        // Tìm kiếm theo các ô nhập liệu (Mã SP, Tên SP, Mã danh mục)
         private void btnTimKiem_Click(object sender, RoutedEventArgs e)
         {
-            string keyword = txtTuKhoa.Text.Trim();
+            string ma = txtMaSP.Text.Trim().ToLower();
+            string ten = txtTenSP.Text.Trim().ToLower();
+            string madm = txtMaDanhMuc.Text.Trim().ToLower();
 
-            if (string.IsNullOrEmpty(keyword))
+            // Nếu tất cả đều rỗng -> hiển thị toàn bộ
+            if (string.IsNullOrEmpty(ma) && string.IsNullOrEmpty(ten) && string.IsNullOrEmpty(madm))
             {
-                _productView.Filter = null;  // hiển thị tất cả
+                _productView.Filter = null;
             }
             else
             {
@@ -172,21 +154,24 @@ namespace WpfApp_QuanLySanPham
                 {
                     Product p = obj as Product;
                     if (p == null) return false;
-                    return p.MSP.IndexOf(keyword, StringComparison.OrdinalIgnoreCase) >= 0
-                        || p.TENSP.IndexOf(keyword, StringComparison.OrdinalIgnoreCase) >= 0;
+
+                    bool matchMa = string.IsNullOrEmpty(ma) || (p.MSP?.ToLower().Contains(ma) == true);
+                    bool matchTen = string.IsNullOrEmpty(ten) || (p.TENSP?.ToLower().Contains(ten) == true);
+                    bool matchMadm = string.IsNullOrEmpty(madm) || (p.MADM?.ToLower().Contains(madm) == true);
+
+                    return matchMa && matchTen && matchMadm;
                 };
             }
         }
 
-        // Làm mới: xóa filter, xóa từ khóa, xóa form nhập
+        // Làm mới: xóa filter, xóa toàn bộ ô nhập liệu
         private void btnLamMoi_Click(object sender, RoutedEventArgs e)
         {
             _productView.Filter = null;
-            txtTuKhoa.Text = "";
             ClearInput();
         }
 
-        // Double-click vào dòng: đưa dữ liệu lên form để sửa
+        // Double-click vào dòng: đưa dữ liệu lên form để sửa (bao gồm MADM)
         private void dgProducts_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             Product selected = dgProducts.SelectedItem as Product;
@@ -194,14 +179,14 @@ namespace WpfApp_QuanLySanPham
 
             txtMaSP.Text = selected.MSP;
             txtTenSP.Text = selected.TENSP;
-            dpNgayNhap.SelectedDate = selected.NgayNhap;
             txtGiaNhap.Text = selected.GiaNhap.ToString();
             txtGiaBan.Text = selected.GiaBan.ToString();
             cboDonVi.Text = selected.Donvi;
+            txtMaDanhMuc.Text = selected.MADM;
         }
     }
 
-    // Lớp sản phẩm với thông báo thay đổi (INotifyPropertyChanged)
+    // Lớp sản phẩm với thông báo thay đổi (INotifyPropertyChanged) – đã thêm MADM
     public class Product : INotifyPropertyChanged
     {
         private string _msp;
@@ -210,6 +195,7 @@ namespace WpfApp_QuanLySanPham
         private decimal _giaNhap;
         private decimal _giaBan;
         private string _donvi;
+        private string _madm;   // Mã danh mục
 
         public string MSP
         {
@@ -245,6 +231,12 @@ namespace WpfApp_QuanLySanPham
         {
             get => _donvi;
             set { _donvi = value; OnPropertyChanged(nameof(Donvi)); }
+        }
+
+        public string MADM
+        {
+            get => _madm;
+            set { _madm = value; OnPropertyChanged(nameof(MADM)); }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
