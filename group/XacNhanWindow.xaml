@@ -1,0 +1,21 @@
+﻿<Window x:Class="group.XacNhanWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Xác minh" Height="200" Width="300">
+
+    <StackPanel Margin="20">
+
+        <TextBlock Text="Nhập mã xác minh"/>
+
+        <PasswordBox x:Name="txtMa" Margin="0,10"/>
+
+        <Button Content="Xác nhận"
+                Height="30"
+                Click="BtnXacNhan_Click"/>
+        
+        <Button Content="Đổi mã xác minh"
+        Click="BtnDoiMa_Click" Margin="0,10" Height="30"/>
+
+    </StackPanel>
+
+</Window>
