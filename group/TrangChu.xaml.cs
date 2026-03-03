@@ -1,119 +1,254 @@
-﻿using System.Windows;
+﻿using MySql.Data.MySqlClient;
+using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
-using System;
+using Microsoft.Win32;
 
 namespace group
 {
     public partial class TrangChu : Window
     {
-        public TrangChu()
+        string TenDangNhap;
+        string Role;
+
+        public TrangChu(string ten, string role)
         {
             InitializeComponent();
+
+            TenDangNhap = ten;
+            Role = role;
+
+            LoadDanhMuc();
         }
 
-        private void BtnSanPham_Click(object sender, RoutedEventArgs e)
+        // ================= LOAD DANH MỤC =================
+        void LoadDanhMuc()
         {
-
-        }
-
-        private void BtnTonKho_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void BtnNhap_Click(object sender, RoutedEventArgs e)
-        {
-        }
-
-        private void BtnXuat_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void BtnQuanLySanPham_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void BtnThemSP_Click(object sender, RoutedEventArgs e)
-        {
-            if (string.IsNullOrWhiteSpace(txtTenSP.Text))
-            {
-                MessageBox.Show("Vui lòng nhập tên sản phẩm");
-                return;
-            }
-
-            string imagePath = string.IsNullOrWhiteSpace(txtHinhAnh.Text)
-                ? "/Images/default.png"
-                : txtHinhAnh.Text;
-
-            // Tạo card sản phẩm mới
-            Border border = new Border
-            {
-                Background = System.Windows.Media.Brushes.White,
-                CornerRadius = new CornerRadius(10),
-                Margin = new Thickness(10),
-                Padding = new Thickness(10),
-                Width = 160
-            };
-
-            StackPanel stack = new StackPanel();
-
-            Image img = new Image
-            {
-                Height = 100,
-                Stretch = System.Windows.Media.Stretch.Uniform
-            };
+            btnBack.Visibility = Visibility.Collapsed;
 
             try
             {
-                BitmapImage bitmap = new BitmapImage();
-                bitmap.BeginInit();
-
-                if (System.IO.File.Exists(imagePath))
+                using (MySqlConnection conn = DBConnection.GetConnection())
                 {
-                    // Ảnh từ ổ đĩa (jpg, png, jpeg đều được)
-                    bitmap.UriSource = new Uri(imagePath, UriKind.Absolute);
-                }
-                else
-                {
-                    // Ảnh trong project (Resource)
-                    bitmap.UriSource = new Uri(
-                        $"pack://application:,,,/{imagePath.TrimStart('/')}",
-                        UriKind.Absolute);
-                }
+                    conn.Open();
 
-                bitmap.EndInit();
-                img.Source = bitmap;
+                    string sql = "SELECT * FROM danhmuc";
+                    MySqlCommand cmd = new MySqlCommand(sql, conn);
+                    MySqlDataReader rd = cmd.ExecuteReader();
+
+                    WrapPanelProducts.Children.Clear();
+
+                    while (rd.Read())
+                    {
+                        string ma = rd["MaDanhMuc"].ToString();
+                        string ten = rd["TenDanhMuc"].ToString();
+                        string imgPath = rd["HinhAnh"].ToString();
+
+                        Border card = new Border()
+                        {
+                            Width = 160,
+                            Margin = new Thickness(10),
+                            Padding = new Thickness(10),
+                            Background = System.Windows.Media.Brushes.White,
+                            CornerRadius = new CornerRadius(10)
+                        };
+
+                        StackPanel sp = new StackPanel();
+
+                        Image img = new Image()
+                        {
+                            Height = 100
+                        };
+
+                        try
+                        {
+                            img.Source = new BitmapImage(
+                                new Uri(imgPath, UriKind.RelativeOrAbsolute));
+                        }
+                        catch
+                        {
+                            img.Source = new BitmapImage(
+                                new Uri("pack://application:,,,/Images/default.png"));
+                        }
+
+                        TextBlock txt = new TextBlock()
+                        {
+                            Text = ten,
+                            HorizontalAlignment = HorizontalAlignment.Center,
+                            FontWeight = FontWeights.Bold
+                        };
+
+                        sp.Children.Add(img);
+                        sp.Children.Add(txt);
+
+                        card.Child = sp;
+
+                        card.MouseDown += (s, e) =>
+                        {
+                            LoadSanPhamTheoDanhMuc(ma);
+                        };
+
+                        WrapPanelProducts.Children.Add(card);
+                    }
+                }
             }
-            catch
+            catch (Exception ex)
             {
-                img.Source = new BitmapImage(
-                    new Uri("pack://application:,,,/Images/default.png", UriKind.Absolute));
-                //}
-
-                TextBlock txt = new TextBlock
-                {
-                    Text = txtTenSP.Text,
-                    FontWeight = FontWeights.Bold,
-                    Margin = new Thickness(0, 10, 0, 0),
-                    HorizontalAlignment = HorizontalAlignment.Center
-                };
-
-                stack.Children.Add(img);
-                stack.Children.Add(txt);
-                border.Child = stack;
-
-                WrapPanelProducts.Children.Add(border);
-
-                txtTenSP.Clear();
-                txtHinhAnh.Clear();
+                MessageBox.Show(ex.Message);
             }
         }
-        private void TxtHinhAnh_TextChanged(object sender, TextChangedEventArgs e)
+
+        // ================= LOAD SẢN PHẨM =================
+        void LoadSanPhamTheoDanhMuc(string maDanhMuc)
         {
-               
+            btnBack.Visibility = Visibility.Visible;
+
+            try
+            {
+                using (MySqlConnection conn = DBConnection.GetConnection())
+                {
+                    conn.Open();
+
+                    string sql =
+                        "SELECT * FROM sanpham WHERE MaDanhMuc=@ma";
+
+                    MySqlCommand cmd = new MySqlCommand(sql, conn);
+                    cmd.Parameters.AddWithValue("@ma", maDanhMuc);
+
+                    MySqlDataReader rd = cmd.ExecuteReader();
+
+                    WrapPanelProducts.Children.Clear();
+
+                    while (rd.Read())
+                    {
+                        string ten = rd["TenSP"].ToString();
+                        string imgPath = rd["HinhAnh"].ToString();
+
+                        Border card = new Border()
+                        {
+                            Width = 160,
+                            Margin = new Thickness(10),
+                            Padding = new Thickness(10),
+                            Background = System.Windows.Media.Brushes.White,
+                            CornerRadius = new CornerRadius(10)
+                        };
+
+                        StackPanel sp = new StackPanel();
+
+                        Image img = new Image()
+                        {
+                            Height = 100,
+                            Source = new BitmapImage(
+                                new Uri(imgPath, UriKind.RelativeOrAbsolute))
+                        };
+
+                        TextBlock txt = new TextBlock()
+                        {
+                            Text = ten,
+                            HorizontalAlignment = HorizontalAlignment.Center,
+                            FontWeight = FontWeights.Bold
+                        };
+
+                        sp.Children.Add(img);
+                        sp.Children.Add(txt);
+
+                        card.Child = sp;
+
+                        WrapPanelProducts.Children.Add(card);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        // ================= CHỌN ẢNH =================
+        private void BtnChonAnh_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog dlg = new OpenFileDialog();
+
+            dlg.Filter = "Image Files|*.jpg;*.png;*.jpeg";
+
+            if (dlg.ShowDialog() == true)
+            {
+                txtHinhAnh.Text = dlg.FileName;
+            }
+        }
+        // ================= QUAY LẠI ===================
+        private void BtnBack_Click(object sender, RoutedEventArgs e)
+        {
+            LoadDanhMuc();
+            btnBack.Visibility = Visibility.Collapsed;
+        }
+        // ================= AUTO MÃ DANH MỤC =================
+        string TaoMaDanhMuc(MySqlConnection conn)
+        {
+            string sql =
+                "SELECT MaDanhMuc FROM danhmuc ORDER BY MaDanhMuc DESC LIMIT 1";
+
+            MySqlCommand cmd = new MySqlCommand(sql, conn);
+
+            object result = cmd.ExecuteScalar();
+
+            if (result == null)
+                return "MD00";
+
+            string last = result.ToString().Substring(2);
+
+            int number = int.Parse(last) + 1;
+
+            return "MD" + number.ToString("00");
+        }
+
+        // ================= THÊM DANH MỤC =================
+        private void BtnThemSP_Click(object sender, RoutedEventArgs e)
+        {
+            string ten = txtTenHangMuc.Text.Trim();
+            string img = txtHinhAnh.Text.Trim();
+
+            if (ten == "")
+            {
+                MessageBox.Show("Nhập tên danh mục");
+                return;
+            }
+
+            if (img == "")
+            {
+                img = "pack://application:,,,/Images/default.png";
+            }
+
+            try
+            {
+                using (MySqlConnection conn = DBConnection.GetConnection())
+                {
+                    conn.Open();
+
+                    string ma = TaoMaDanhMuc(conn);
+
+                    string sql =
+                        @"INSERT INTO danhmuc(MaDanhMuc,TenDanhMuc,HinhAnh)
+                          VALUES(@ma,@ten,@img)";
+
+                    MySqlCommand cmd = new MySqlCommand(sql, conn);
+
+                    cmd.Parameters.AddWithValue("@ma", ma);
+                    cmd.Parameters.AddWithValue("@ten", ten);
+                    cmd.Parameters.AddWithValue("@img", img);
+
+                    cmd.ExecuteNonQuery();
+
+                    MessageBox.Show("Thêm danh mục thành công");
+
+                    LoadDanhMuc();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
     }
 }

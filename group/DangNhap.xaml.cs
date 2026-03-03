@@ -1,22 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace group
 {
-    /// <summary>
-    /// Interaction logic for DangNhap.xaml
-    /// </summary>
     public partial class DangNhap : Window
     {
         public DangNhap()
@@ -24,45 +11,58 @@ namespace group
             InitializeComponent();
         }
 
+        // nút hiện mật khẩu
+        private void BtnShowPassword_Click(object sender, RoutedEventArgs e)
+        {
+            if (txtPassword.PasswordChar == '*')
+                txtPassword.PasswordChar = '\0';
+            else
+                txtPassword.PasswordChar = '*';
+        }
+
+        // đăng nhập
         private void BtnLogin_Click(object sender, RoutedEventArgs e)
         {
-            string username = txtUsername.Text.Trim();
-            string password = txtPassword.Password.Trim();
+            string user = txtUsername.Text.Trim();
+            string pass = txtPassword.Password.Trim();
 
-            if (username == "" || password == "")
+            using (MySqlConnection conn = DBConnection.GetConnection())
             {
-                MessageBox.Show("Vui lòng nhập đầy đủ thông tin!");
-                return;
-            }
+                conn.Open();
 
-            if (username == "admin" && password == "123")
-            {
-                Session.Username = username;
-                Session.Role = "Admin";
+                string sql = "SELECT * FROM taikhoan WHERE username=@u AND password=@p";
 
-                TrangChu main = new TrangChu();
-                main.Show();
-                this.Close();
-            }
-            else
-            {
-                MessageBox.Show("Sai tài khoản hoặc mật khẩu!");
+                MySqlCommand cmd = new MySqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@u", user);
+                cmd.Parameters.AddWithValue("@p", pass);
+
+                MySqlDataReader rd = cmd.ExecuteReader();
+
+                if (rd.Read())
+                {
+                    string role = rd["role"].ToString();
+
+                    TrangChu f = new TrangChu(user, role);
+                    f.Show();
+                    this.Close();
+                }
+                else
+                {
+                    MessageBox.Show("Sai tài khoản hoặc mật khẩu");
+                }
             }
         }
 
+        // quên mật khẩu
         private void BtnForget_Click(object sender, RoutedEventArgs e)
         {
-            QuenMatKhau forgot = new QuenMatKhau();
-            this.Hide();
-
-            forgot.ShowDialog();
-
-            this.Show();
+            MessageBox.Show("Liên hệ admin để cấp lại mật khẩu");
         }
 
+        // thoát
         private void BtnExit_Click(object sender, RoutedEventArgs e)
         {
-            this.Close();
+            Application.Current.Shutdown();
         }
     }
 }

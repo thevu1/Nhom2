@@ -2,12 +2,14 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Hệ thống quản lý kho"
-        Height="650" Width="1100"
+        Height="650"
+        Width="1100"
         WindowStartupLocation="CenterScreen"
         Background="#F1F5F9">
 
-    <!-- STYLE MENU BUTTON -->
+    <!-- STYLE MENU -->
     <Window.Resources>
+
         <Style x:Key="MenuButtonStyle" TargetType="Button">
             <Setter Property="Margin" Value="10"/>
             <Setter Property="Height" Value="45"/>
@@ -18,20 +20,24 @@
             <Setter Property="Padding" Value="15,0"/>
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="Cursor" Value="Hand"/>
+
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter Property="Background" Value="#1E293B"/>
                 </Trigger>
             </Style.Triggers>
         </Style>
+
     </Window.Resources>
 
     <Grid>
 
+        <!-- CHIA LAYOUT -->
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="220"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
+
 
         <!-- SIDEBAR -->
         <Border Background="#0F172A" Grid.Column="0">
@@ -44,118 +50,125 @@
                            Margin="15"/>
 
                 <Separator Margin="10" Background="#1E293B"/>
+
                 <Button Content="📦 Sản phẩm"
-                        Click="BtnSanPham_Click"
                         Style="{StaticResource MenuButtonStyle}"/>
+
                 <Button Content="📊 Tồn kho"
-                        Click="BtnTonKho_Click"
                         Style="{StaticResource MenuButtonStyle}"/>
+
                 <Button Content="📥 Phiếu nhập"
-                        Click="BtnNhap_Click"
                         Style="{StaticResource MenuButtonStyle}"/>
+
                 <Button Content="📤 Phiếu xuất"
-                        Click="BtnXuat_Click"
                         Style="{StaticResource MenuButtonStyle}"/>
+
                 <Button Content="🛠 Quản lý sản phẩm"
-                        Click="BtnQuanLySanPham_Click"
                         Style="{StaticResource MenuButtonStyle}"/>
-                <Separator Margin="10" Background="#1E293B"/>
+
             </StackPanel>
         </Border>
 
-        <!-- RIGHT AREA -->
-        <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto">
-            <StackPanel>
 
-                <!-- KHUNG THÊM SẢN PHẨM -->
-                <Border Background="White" CornerRadius="10" Margin="10" Padding="15">
-                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                        <Label Content="Nhập tên sản phẩm :"/>
-                        <TextBox x:Name="txtTenSP"
-                         Width="200"
-                         Height="35"
-                         Margin="5"
-                         VerticalContentAlignment="Center"
-                         ToolTip="Tên sản phẩm"/>
-                        <Label Content="Link hình ảnh :"/>
-                        <TextBox x:Name="txtHinhAnh"
-                         Width="200"
-                         Height="35"
-                         Margin="5"
-                         VerticalContentAlignment="Center"
-                         ToolTip="Đường dẫn ảnh (ví dụ: /Images/spmoi.png)" TextChanged="TxtHinhAnh_TextChanged"/>
 
-                        <Button Content="➕ Thêm"
-                        Width="120"
-                        Height="35"
-                        Margin="5"
-                        Background="#0F172A"
-                        Foreground="White"
-                        Click="BtnThemSP_Click"/>
-                    </StackPanel>
-                </Border>
+        <!-- KHU VỰC CHÍNH -->
+        <Grid Grid.Column="1">
 
-                <!-- DANH SÁCH SẢN PHẨM CỐ ĐỊNH + SẢN PHẨM MỚI -->
-                <WrapPanel x:Name="WrapPanelProducts" Margin="10" ItemWidth="180" ItemHeight="200">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
 
-                    <!-- SẢN PHẨM 1 -->
-                    <Border Background="White" CornerRadius="10" Margin="10" Padding="10" Width="160">
-                        <StackPanel>
-                            <Image Source="/Images/laptop.png" Height="100" Stretch="Uniform"/>
-                            <TextBlock Text="Laptop "
-                               FontWeight="Bold"
-                               Margin="0,10,0,0"
-                               HorizontalAlignment="Center"/>
-                        </StackPanel>
-                    </Border>
 
-                    <!-- SẢN PHẨM 2 -->
-                    <Border Background="White" CornerRadius="10" Margin="10" Padding="10" Width="160">
-                        <StackPanel>
-                            <Image Source="/Images/banphim.jpg" Height="100" Stretch="Uniform"/>
-                            <TextBlock Text="Bàn phím cơ"
-                               FontWeight="Bold"
-                               Margin="0,10,0,0"
-                               HorizontalAlignment="Center"/>
-                        </StackPanel>
-                    </Border>
+            <!-- KHUNG TẠO DANH MỤC -->
+            <Border Background="White"
+        Margin="10"
+        Padding="15"
+        CornerRadius="10"
+        Grid.Row="0">
 
-                    <!-- SẢN PHẨM 3 -->
-                    <Border Background="White" CornerRadius="10" Margin="10" Padding="10" Width="160">
-                        <StackPanel>
-                            <Image Source="/Images/chuot.jpg" Height="100" Stretch="Uniform"/>
-                            <TextBlock Text="Chuột máy tính"
-                               FontWeight="Bold"
-                               Margin="0,10,0,0"
-                               HorizontalAlignment="Center"/>
-                        </StackPanel>
-                    </Border>
+                <Grid>
 
-                    <!-- SẢN PHẨM 4 -->
-                    <Border Background="White" CornerRadius="10" Margin="10" Padding="10" Width="160">
-                        <StackPanel>
-                            <Image Source="/Images/manhinh.jpg" Height="100" Stretch="Uniform"/>
-                            <TextBlock Text="Màn hình máy tính"
-                               FontWeight="Bold"
-                               Margin="0,10,0,0"
-                               HorizontalAlignment="Center"/>
-                        </StackPanel>
-                    </Border>
+                    <!-- CHIA CỘT RESPONSIVE -->
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
 
-                    <!-- SẢN PHẨM 5 -->
-                    <Border Background="White" CornerRadius="10" Margin="10" Padding="10" Width="160">
-                        <StackPanel>
-                            <Image Source="/Images/tainghe.png" Height="100" Stretch="Uniform"/>
-                            <TextBlock Text="Tai nghe chụp tai"
-                               FontWeight="Bold"
-                               Margin="0,10,0,0"
-                               HorizontalAlignment="Center"/>
-                        </StackPanel>
-                    </Border>
+                    <!-- LABEL -->
+                    <TextBlock Grid.Column="0"
+                   Text="Tạo danh mục:"
+                   VerticalAlignment="Center"
+                   FontWeight="Bold"
+                   Margin="0,0,10,0"/>
 
-                </WrapPanel>
-            </StackPanel>
-        </ScrollViewer>
+                    <!-- TÊN DANH MỤC -->
+                    <TextBox x:Name="txtTenHangMuc"
+                 Grid.Column="1"
+                 Height="35"
+                 Margin="5"
+                 VerticalContentAlignment="Center"/>
+
+                    <!-- HÌNH ẢNH -->
+                    <TextBox x:Name="txtHinhAnh"
+                 Grid.Column="2"
+                 Height="35"
+                 Margin="5"
+                 VerticalContentAlignment="Center"/>
+
+                    <!-- NÚT CHỌN ẢNH -->
+                    <Button Grid.Column="3"
+                Content="Chọn ảnh"
+                Height="35"
+                Margin="5"
+                Click="BtnChonAnh_Click"/>
+
+                    <!-- NÚT THÊM -->
+                    <Button Grid.Column="4"
+                Content="➕ Thêm"
+                Height="35"
+                Margin="5"
+                Background="#0F172A"
+                Foreground="White"
+                Click="BtnThemSP_Click"/>
+
+                    <!-- NÚT BACK GÓC PHẢI DƯỚI -->
+                    
+                </Grid>
+            </Border>
+            
+            <!-- DANH SÁCH DANH MỤC / SẢN PHẨM -->
+            <GroupBox Grid.Row="1">
+                <Grid>
+                <ScrollViewer >
+
+                    <WrapPanel x:Name="WrapPanelProducts"
+                           Margin="10"
+                           ItemWidth="180"
+                           ItemHeight="200"/>
+
+                </ScrollViewer>
+                    <Button x:Name="btnBack"
+            Content="← Trang chủ"
+            Width="140"
+            Height="40"
+            Margin="20"
+            Background="#64748B"
+            Foreground="White"
+            Visibility="Collapsed"
+            Click="BtnBack_Click"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Bottom"
+            Panel.ZIndex="10"/>
+                </Grid>
+            </GroupBox>
+            
+
+        </Grid>
 
     </Grid>
 </Window>

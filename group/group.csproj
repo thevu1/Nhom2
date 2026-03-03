@@ -140,6 +140,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="DBConnection.cs" />
     <Compile Include="DoiMaWindow.xaml.cs">
       <DependentUpon>DoiMaWindow.xaml</DependentUpon>
     </Compile>
