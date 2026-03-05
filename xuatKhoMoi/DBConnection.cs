@@ -12,7 +12,7 @@ namespace xuatKhoMoi
         public static MySqlConnection GetConnection()
         {
             string connStr =
-"server=localhost;database=phieuxuat;uid=root;pwd=123456;SslMode=None;Charset=utf8mb4;";
+                "server=localhost;database=phieuxuat;uid=root;pwd=123456;SslMode=None;Charset=utf8mb4;";
             return new MySqlConnection(connStr);
         }
     }

@@ -10,6 +10,7 @@ namespace xuatKhoMoi
     {
         public string MaSP { get; set; }
         public string TenSP { get; set; }
+        public decimal DonGia { get; set; }
 
         public override string ToString()
         {

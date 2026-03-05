@@ -11,7 +11,7 @@
  Target Server Version : 80408 (8.4.8)
  File Encoding         : 65001
 
- Date: 28/02/2026 13:33:53
+ Date: 02/03/2026 23:16:08
 */
 
 SET NAMES utf8mb4;
@@ -220,5 +220,20 @@ CREATE TABLE `tonkho`  (
 -- ----------------------------
 -- Records of tonkho
 -- ----------------------------
+
+-- ----------------------------
+-- Table structure for xacnhan
+-- ----------------------------
+DROP TABLE IF EXISTS `xacnhan`;
+CREATE TABLE `xacnhan`  (
+  `Id` int NOT NULL AUTO_INCREMENT,
+  `MaXacNhan` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  PRIMARY KEY (`Id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of xacnhan
+-- ----------------------------
+INSERT INTO `xacnhan` VALUES (1, '123456');
 
 SET FOREIGN_KEY_CHECKS = 1;
