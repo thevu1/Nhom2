@@ -1,9 +1,9 @@
-﻿<Window x:Class="group.QuenMatKhau"
+﻿<Window x:Class="group.XacNhanOTP"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Quên mật khẩu"
-        Height="350"
-        Width="450"
+        Title="Xác nhận OTP"
+        Height="320"
+        Width="420"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
         Background="#F4F6F9">
@@ -23,20 +23,21 @@
                 </Grid.RowDefinitions>
 
                 <!-- Tiêu đề -->
-                <TextBlock Text="🔐 Quên mật khẩu"
+                <TextBlock Text="🔑 Xác nhận OTP"
                            FontSize="20"
                            FontWeight="Bold"
                            Foreground="#2C3E50"
                            HorizontalAlignment="Center"
                            Margin="0,0,0,20"/>
 
-                <!-- Nhập Email / Username -->
+                <!-- Nhập OTP -->
                 <StackPanel Grid.Row="1" Margin="0,10">
-                    <TextBlock Text="hoặc Tên đăng nhập"
+
+                    <TextBlock Text="Nhập mã OTP"
                                FontWeight="SemiBold"
                                Foreground="#34495E"/>
 
-                    <TextBox x:Name="txtEmailOrUser"
+                    <TextBox x:Name="txtOTP"
                              Height="35"
                              Margin="0,5,0,0"
                              Padding="8"
@@ -45,6 +46,7 @@
                              BorderBrush="#D0D5DD"
                              BorderThickness="1"
                              VerticalContentAlignment="Center"/>
+
                 </StackPanel>
 
                 <!-- Buttons -->
@@ -53,8 +55,8 @@
                             HorizontalAlignment="Center"
                             Margin="0,20">
 
-                    <Button Content="Gửi yêu cầu"
-                            Width="130"
+                    <Button Content="Xác nhận"
+                            Width="120"
                             Height="40"
                             Margin="10,0"
                             Background="#4CAF50"
@@ -62,7 +64,7 @@
                             FontWeight="Bold"
                             BorderThickness="0"
                             Cursor="Hand"
-                            Click="BtnSend_Click">
+                            Click="BtnVerify_Click">
 
                         <Button.Style>
                             <Style TargetType="Button">
@@ -77,11 +79,13 @@
                                         </ControlTemplate>
                                     </Setter.Value>
                                 </Setter>
+
                                 <Style.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
                                         <Setter Property="Background" Value="#45A049"/>
                                     </Trigger>
                                 </Style.Triggers>
+
                             </Style>
                         </Button.Style>
                     </Button>
@@ -110,14 +114,17 @@
                                         </ControlTemplate>
                                     </Setter.Value>
                                 </Setter>
+
                                 <Style.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
                                         <Setter Property="Background" Value="#C0392B"/>
                                     </Trigger>
                                 </Style.Triggers>
+
                             </Style>
                         </Button.Style>
                     </Button>
+
                 </StackPanel>
 
                 <!-- Thông báo -->
@@ -127,6 +134,7 @@
                            FontWeight="SemiBold"
                            HorizontalAlignment="Center"
                            Margin="0,10"/>
+
             </Grid>
         </Border>
     </Grid>

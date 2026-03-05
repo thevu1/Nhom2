@@ -140,6 +140,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="DatMatKhauMoi.xaml.cs">
+      <DependentUpon>DatMatKhauMoi.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DBConnection.cs" />
     <Compile Include="DoiMaWindow.xaml.cs">
       <DependentUpon>DoiMaWindow.xaml</DependentUpon>
@@ -147,10 +150,17 @@
     <Compile Include="TrangChu.xaml.cs">
       <DependentUpon>TrangChu.xaml</DependentUpon>
     </Compile>
+    <Compile Include="XacNhanOTP.xaml.cs">
+      <DependentUpon>XacNhanOTP.xaml</DependentUpon>
+    </Compile>
     <Compile Include="XacNhanWindow.xaml.cs">
       <DependentUpon>XacNhanWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="DangNhap.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DatMatKhauMoi.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -182,6 +192,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="TrangChu.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="XacNhanOTP.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

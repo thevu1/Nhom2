@@ -56,7 +56,9 @@ namespace group
         // quên mật khẩu
         private void BtnForget_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Liên hệ admin để cấp lại mật khẩu");
+            QuenMatKhau qmk = new QuenMatKhau();
+            qmk.Show();
+            this.Close();
         }
 
         // thoát

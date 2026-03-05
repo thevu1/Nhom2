@@ -1,9 +1,9 @@
-﻿<Window x:Class="group.QuenMatKhau"
+﻿<Window x:Class="group.DatMatKhauMoi"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Quên mật khẩu"
-        Height="350"
-        Width="450"
+        Title="Đặt mật khẩu mới"
+        Height="400"
+        Width="500"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
         Background="#F4F6F9">
@@ -19,42 +19,58 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
                 <!-- Tiêu đề -->
-                <TextBlock Text="🔐 Quên mật khẩu"
+                <TextBlock Text="🔑 Đặt mật khẩu mới"
                            FontSize="20"
                            FontWeight="Bold"
                            Foreground="#2C3E50"
                            HorizontalAlignment="Center"
                            Margin="0,0,0,20"/>
 
-                <!-- Nhập Email / Username -->
+                <!-- Mật khẩu mới -->
                 <StackPanel Grid.Row="1" Margin="0,10">
-                    <TextBlock Text="hoặc Tên đăng nhập"
+                    <TextBlock Text="Mật khẩu mới"
                                FontWeight="SemiBold"
                                Foreground="#34495E"/>
 
-                    <TextBox x:Name="txtEmailOrUser"
-                             Height="35"
-                             Margin="0,5,0,0"
-                             Padding="8"
-                             FontSize="14"
-                             Background="#F9FAFB"
-                             BorderBrush="#D0D5DD"
-                             BorderThickness="1"
-                             VerticalContentAlignment="Center"/>
+                    <PasswordBox x:Name="txtNewPass"
+                                 Height="35"
+                                 Margin="0,5,0,0"
+                                 Padding="8"
+                                 FontSize="14"
+                                 Background="#F9FAFB"
+                                 BorderBrush="#D0D5DD"
+                                 BorderThickness="1"/>
+                </StackPanel>
+
+                <!-- Xác nhận mật khẩu -->
+                <StackPanel Grid.Row="2" Margin="0,10">
+                    <TextBlock Text="Xác nhận mật khẩu"
+                               FontWeight="SemiBold"
+                               Foreground="#34495E"/>
+
+                    <PasswordBox x:Name="txtConfirmPass"
+                                 Height="35"
+                                 Margin="0,5,0,0"
+                                 Padding="8"
+                                 FontSize="14"
+                                 Background="#F9FAFB"
+                                 BorderBrush="#D0D5DD"
+                                 BorderThickness="1"/>
                 </StackPanel>
 
                 <!-- Buttons -->
-                <StackPanel Grid.Row="2"
+                <StackPanel Grid.Row="3"
                             Orientation="Horizontal"
                             HorizontalAlignment="Center"
                             Margin="0,20">
 
-                    <Button Content="Gửi yêu cầu"
-                            Width="130"
+                    <Button Content="Lưu mật khẩu"
+                            Width="140"
                             Height="40"
                             Margin="10,0"
                             Background="#4CAF50"
@@ -62,7 +78,7 @@
                             FontWeight="Bold"
                             BorderThickness="0"
                             Cursor="Hand"
-                            Click="BtnSend_Click">
+                            Click="BtnSave_Click">
 
                         <Button.Style>
                             <Style TargetType="Button">
@@ -77,11 +93,13 @@
                                         </ControlTemplate>
                                     </Setter.Value>
                                 </Setter>
+
                                 <Style.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
                                         <Setter Property="Background" Value="#45A049"/>
                                     </Trigger>
                                 </Style.Triggers>
+
                             </Style>
                         </Button.Style>
                     </Button>
@@ -110,23 +128,27 @@
                                         </ControlTemplate>
                                     </Setter.Value>
                                 </Setter>
+
                                 <Style.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
                                         <Setter Property="Background" Value="#C0392B"/>
                                     </Trigger>
                                 </Style.Triggers>
+
                             </Style>
                         </Button.Style>
                     </Button>
+
                 </StackPanel>
 
                 <!-- Thông báo -->
                 <TextBlock x:Name="lblMessage"
-                           Grid.Row="3"
+                           Grid.Row="4"
                            Foreground="#E74C3C"
                            FontWeight="SemiBold"
                            HorizontalAlignment="Center"
                            Margin="0,10"/>
+
             </Grid>
         </Border>
     </Grid>

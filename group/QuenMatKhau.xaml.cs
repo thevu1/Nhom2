@@ -1,24 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace group
 {
-    /// <summary>
-    /// Interaction logic for QuenMatKhau.xaml
-    /// </summary>
     public partial class QuenMatKhau : Window
     {
+        public static string OTPCode = "";
+        public static string UserReset = "";
+
         public QuenMatKhau()
         {
             InitializeComponent();
@@ -26,24 +16,36 @@ namespace group
 
         private void BtnSend_Click(object sender, RoutedEventArgs e)
         {
-            string input = txtEmailOrUser.Text.Trim();
+            string user = txtEmailOrUser.Text.Trim();
 
-            if (string.IsNullOrEmpty(input))
+            using (var conn = DBConnection.GetConnection())
             {
-                lblMessage.Text = "Vui lòng nhập Email hoặc Tên đăng nhập!";
-                return;
-            }
+                conn.Open();
 
-            // Giả lập kiểm tra trong hệ thống
-            if (input == "admin" || input == "admin@example.com")
-            {
-                lblMessage.Text = "Yêu cầu đặt lại mật khẩu đã được gửi!";
-                lblMessage.Foreground = System.Windows.Media.Brushes.Green;
-            }
-            else
-            {
-                lblMessage.Text = "Không tìm thấy tài khoản!";
-                lblMessage.Foreground = System.Windows.Media.Brushes.Red;
+                string sql = "SELECT COUNT(*) FROM taikhoan WHERE Username=@u";
+
+                MySqlCommand cmd = new MySqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@u", user);
+
+                int count = Convert.ToInt32(cmd.ExecuteScalar());
+
+                if (count == 0)
+                {
+                    lblMessage.Text = "Tài khoản không tồn tại";
+                    return;
+                }
+
+                Random rnd = new Random();
+                OTPCode = rnd.Next(100000, 999999).ToString();
+
+                UserReset = user;
+
+                MessageBox.Show("OTP của bạn: " + OTPCode);
+
+                XacNhanOTP win = new XacNhanOTP();
+                win.Show();
+
+                this.Close();
             }
         }
 
