@@ -1,0 +1,73 @@
+﻿<Window x:Class="QuanlyTonkho_NEW.MainWindow"
+         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Quản lý Tồn Kho" Height="600" Width="900" WindowStartupLocation="CenterScreen">
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <GroupBox Header="Nhập thông tin sản phẩm mới" Grid.Row="0" Margin="0,0,0,10" Padding="10" BorderBrush="#007ACC">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Label Content="Mã SP:" Grid.Row="0" Grid.Column="0"/>
+                <TextBox Name="txtInputMa" Grid.Row="0" Grid.Column="1" Margin="5"/>
+
+                <Label Content="Tên SP:" Grid.Row="0" Grid.Column="2"/>
+                <TextBox Name="txtInputTen" Grid.Row="0" Grid.Column="3" Margin="5"/>
+
+                <Label Content="Loại Hàng:" Grid.Row="0" Grid.Column="4"/>
+                <ComboBox Name="cboInputLoai" Grid.Row="0" Grid.Column="5" Margin="5" SelectedIndex="0">
+                    <ComboBoxItem Content="Điện tử"/>
+                    <ComboBoxItem Content="Gia dụng"/>
+                    <ComboBoxItem Content="Thực phẩm"/>
+                    <ComboBoxItem Content="Khác"/>
+                </ComboBox>
+
+                <Label Content="Tổng Nhập:" Grid.Row="1" Grid.Column="0"/>
+                <TextBox Name="txtInputNhap" Grid.Row="1" Grid.Column="1" Margin="5"/>
+
+                <Label Content="Tổng Xuất:" Grid.Row="1" Grid.Column="2"/>
+                <TextBox Name="txtInputXuat" Grid.Row="1" Grid.Column="3" Margin="5"/>
+
+                <Button Content="➕ Thêm Mới" Grid.Row="1" Grid.Column="4" Grid.ColumnSpan="2" 
+                        Margin="5" Background="#007ACC" Foreground="White" FontWeight="Bold"
+                        Click="BtnThem_Click"/>
+            </Grid>
+        </GroupBox>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,10">
+            <Label Content="Tìm kiếm nhanh:" FontWeight="Bold" VerticalAlignment="Center"/>
+            <TextBox Name="txtTimKiem" Width="250" Margin="10,0" Height="25" VerticalContentAlignment="Center"/>
+            <Button Content="🔍 Tìm" Width="80" Click="BtnTimKiem_Click"/>
+        </StackPanel>
+
+        <DataGrid Name="dgvTonKho" Grid.Row="2" AutoGenerateColumns="False" 
+                  CanUserAddRows="False" IsReadOnly="True"
+                  AlternatingRowBackground="#E8F4FF" HeadersVisibility="Column">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Mã SP" Binding="{Binding MaSP}" Width="80"/>
+                <DataGridTextColumn Header="Tên Sản Phẩm" Binding="{Binding TenSP}" Width="*"/>
+                <DataGridTextColumn Header="Loại Hàng" Binding="{Binding LoaiHang}" Width="100"/>
+                <DataGridTextColumn Header="Tổng Nhập" Binding="{Binding TongNhap}" Width="100"/>
+                <DataGridTextColumn Header="Tổng Xuất" Binding="{Binding TongXuat}" Width="100"/>
+                <DataGridTextColumn Header="Tồn Kho" Binding="{Binding TonHienTai}" Width="100" FontWeight="Bold" Foreground="Red"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</Window>
